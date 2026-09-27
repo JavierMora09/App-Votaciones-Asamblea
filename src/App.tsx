@@ -51,17 +51,23 @@ function VoterRoom({ voter, onLeave }: { voter: VoterSession; onLeave: () => voi
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [message, setMessage] = useState('')
-  const [lastVotedQuestionId, setLastVotedQuestionId] = useState<string | null>(null)
+  const [hasVotedCurrentPoll, setHasVotedCurrentPoll] = useState(false)
 
   async function loadPoll() {
     const { data } = await supabase.from('questions').select('id, question, options').eq('status', 'open').maybeSingle()
     const nextPoll = data ? { id: data.id, question: data.question, options: data.options as string[] } : null
 
-    if (!nextPoll || nextPoll.id !== poll?.id) {
+    if (!nextPoll) {
       setMessage('')
-      setLastVotedQuestionId(null)
-    } else if (lastVotedQuestionId === nextPoll.id) {
-      setMessage((current) => current || 'Su voto fue registrado para esta consulta.')
+      setHasVotedCurrentPoll(false)
+      setPoll(null)
+      setLoading(false)
+      return
+    }
+
+    if (poll && nextPoll.id !== poll.id) {
+      setMessage('')
+      setHasVotedCurrentPoll(false)
     }
 
     setPoll(nextPoll)
@@ -91,7 +97,7 @@ function VoterRoom({ voter, onLeave }: { voter: VoterSession; onLeave: () => voi
       document.removeEventListener('visibilitychange', handleVisibility)
       window.removeEventListener('hashchange', refresh)
     }
-  }, [])
+  }, [poll])
 
   async function castVote(option: string) {
     if (!poll || submitting) return
@@ -101,17 +107,16 @@ function VoterRoom({ voter, onLeave }: { voter: VoterSession; onLeave: () => voi
     setSubmitting(false)
     if (error) {
       setMessage('No fue posible registrar el voto. Intente nuevamente.')
+      setHasVotedCurrentPoll(false)
       return
     }
     const result = data?.[0] as VoteResult | undefined
     const confirmation = result?.inserted_count ? `Su voto fue registrado para ${result.inserted_count} ${result.inserted_count === 1 ? 'parcela.' : 'parcelas.'}` : 'Las parcelas de esta sesion ya habian votado esta pregunta.'
-    setLastVotedQuestionId(poll.id)
+    setHasVotedCurrentPoll(true)
     setMessage(confirmation)
   }
 
-  const hasAnsweredCurrentPoll = Boolean(message) && lastVotedQuestionId === poll?.id
-
-  return <main className="room-page"><div className="room-topline"><div><p className="eyebrow">Participante</p><p className="participant-name">{voter.name}</p><p className="lot-label">{voter.parcels.length === 1 ? '1 parcela habilitada' : `${voter.parcels.length} parcelas habilitadas`}</p></div><button type="button" className="text-button" onClick={onLeave}>Salir</button></div>{loading ? <section className="waiting-state"><p className="status">Cargando</p><h1>Preparando la asamblea</h1></section> : poll ? <section className="ballot" aria-live="polite"><p className="status open">Votacion abierta</p><h1>{poll.question}</h1>{hasAnsweredCurrentPoll ? <div className="success-message"><h2>{message}</h2><p>Permanezca en esta pagina para la siguiente pregunta.</p></div> : <div className="options" role="group" aria-label="Opciones de voto">{poll.options.map((option) => <button key={option} type="button" className="option-button" disabled={submitting} onClick={() => void castVote(option)}>{option}</button>)}</div>}</section> : <section className="waiting-state" aria-live="polite"><div className="waiting-mark" aria-hidden="true" /><p className="status">Sala de espera</p><h1>Esperando la siguiente votacion</h1><p>La pregunta aparecera aqui cuando sea habilitada.</p></section>}</main>
+  return <main className="room-page"><div className="room-topline"><div><p className="eyebrow">Participante</p><p className="participant-name">{voter.name}</p><p className="lot-label">{voter.parcels.length === 1 ? '1 parcela habilitada' : `${voter.parcels.length} parcelas habilitadas`}</p></div><button type="button" className="text-button" onClick={onLeave}>Salir</button></div>{loading ? <section className="waiting-state"><p className="status">Cargando</p><h1>Preparando la asamblea</h1></section> : poll ? <section className="ballot" aria-live="polite"><p className="status open">Votacion abierta</p><h1>{poll.question}</h1>{hasVotedCurrentPoll ? <div className="success-message"><h2>{message}</h2><p>Permanezca en esta pagina para la siguiente pregunta.</p></div> : <div className="options" role="group" aria-label="Opciones de voto">{poll.options.map((option) => <button key={option} type="button" className="option-button" disabled={submitting} onClick={() => void castVote(option)}>{option}</button>)}</div>}</section> : <section className="waiting-state" aria-live="polite"><div className="waiting-mark" aria-hidden="true" /><p className="status">Sala de espera</p><h1>Esperando la siguiente votacion</h1><p>La pregunta aparecera aqui cuando sea habilitada.</p></section>}</main>
 }
 
 function AdminLogin({ onLogin }: { onLogin: (session: Session) => void }) {
