@@ -62,7 +62,8 @@ function VoterRoom({ voter, onLeave }: { voter: VoterSession; onLeave: () => voi
 
   useEffect(() => {
     const refresh = () => {
-      if (!document.hidden) {
+      const shouldRefresh = !document.hidden && window.location.hash !== '#admin'
+      if (shouldRefresh) {
         void loadPoll()
       }
     }
@@ -70,15 +71,17 @@ function VoterRoom({ voter, onLeave }: { voter: VoterSession; onLeave: () => voi
     refresh()
     const interval = window.setInterval(refresh, POLL_INTERVAL_MS)
     const handleVisibility = () => {
-      if (!document.hidden) {
+      if (!document.hidden && window.location.hash !== '#admin') {
         void loadPoll()
       }
     }
 
     document.addEventListener('visibilitychange', handleVisibility)
+    window.addEventListener('hashchange', refresh)
     return () => {
       window.clearInterval(interval)
       document.removeEventListener('visibilitychange', handleVisibility)
+      window.removeEventListener('hashchange', refresh)
     }
   }, [])
 
@@ -146,7 +149,8 @@ function Admin({ onLogout }: { onLogout: () => void }) {
 
   useEffect(() => {
     const refresh = () => {
-      if (!document.hidden) {
+      const shouldRefresh = !document.hidden && window.location.hash === '#admin'
+      if (shouldRefresh) {
         void loadAdminData()
       }
     }
@@ -154,15 +158,17 @@ function Admin({ onLogout }: { onLogout: () => void }) {
     refresh()
     const interval = window.setInterval(refresh, POLL_INTERVAL_MS)
     const handleVisibility = () => {
-      if (!document.hidden) {
+      if (!document.hidden && window.location.hash === '#admin') {
         void loadAdminData()
       }
     }
 
     document.addEventListener('visibilitychange', handleVisibility)
+    window.addEventListener('hashchange', refresh)
     return () => {
       window.clearInterval(interval)
       document.removeEventListener('visibilitychange', handleVisibility)
+      window.removeEventListener('hashchange', refresh)
     }
   }, [])
 
