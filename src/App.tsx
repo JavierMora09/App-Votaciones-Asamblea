@@ -10,6 +10,7 @@ type VoteResult = { inserted_count: number; existing_count: number }
 type AdminVote = { option: string; parcel: string; owner: string; castAt: string }
 
 const VOTER_SESSION_KEY = 'asamblea-voter-session'
+const POLL_INTERVAL_MS = 15000
 
 function Header({ admin = false }: { admin?: boolean }) {
   return <header className="site-header"><a href={admin ? '#/' : '#admin'} className="brand">Asamblea<span>{admin ? 'Administracion' : 'Propietarios'}</span></a></header>
@@ -60,9 +61,25 @@ function VoterRoom({ voter, onLeave }: { voter: VoterSession; onLeave: () => voi
   }
 
   useEffect(() => {
-    void loadPoll()
-    const interval = window.setInterval(() => void loadPoll(), 3000)
-    return () => window.clearInterval(interval)
+    const refresh = () => {
+      if (!document.hidden) {
+        void loadPoll()
+      }
+    }
+
+    refresh()
+    const interval = window.setInterval(refresh, POLL_INTERVAL_MS)
+    const handleVisibility = () => {
+      if (!document.hidden) {
+        void loadPoll()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => {
+      window.clearInterval(interval)
+      document.removeEventListener('visibilitychange', handleVisibility)
+    }
   }, [])
 
   async function castVote(option: string) {
@@ -128,9 +145,25 @@ function Admin({ onLogout }: { onLogout: () => void }) {
   }
 
   useEffect(() => {
-    void loadAdminData()
-    const interval = window.setInterval(() => void loadAdminData(), 3000)
-    return () => window.clearInterval(interval)
+    const refresh = () => {
+      if (!document.hidden) {
+        void loadAdminData()
+      }
+    }
+
+    refresh()
+    const interval = window.setInterval(refresh, POLL_INTERVAL_MS)
+    const handleVisibility = () => {
+      if (!document.hidden) {
+        void loadAdminData()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => {
+      window.clearInterval(interval)
+      document.removeEventListener('visibilitychange', handleVisibility)
+    }
   }, [])
 
   const resultRows = useMemo(() => (poll?.options ?? []).map((option) => ({ option, count: votes.filter((vote) => vote.option === option).length })), [poll, votes])
