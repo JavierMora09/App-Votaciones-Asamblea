@@ -1,0 +1,69 @@
+:root { font-family: Arial, Helvetica, sans-serif; color: #1d2b35; background: #f4f6f4; font-synthesis: none; text-rendering: optimizeLegibility; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+.site-header { min-height: 72px; padding: 18px max(24px, calc((100vw - 1120px) / 2)); background: #fff; border-bottom: 1px solid #dce3e1; }
+.brand { color: #1d2b35; font-size: 21px; font-weight: 700; line-height: 1; text-decoration: none; }
+.brand span { display: block; margin-top: 5px; color: #68756f; font-size: 13px; font-weight: 400; }
+.centered-page, .room-page { width: min(100% - 40px, 720px); margin: 0 auto; }
+.centered-page { min-height: calc(100vh - 72px); display: grid; place-items: center; padding: 42px 0; }
+.access-panel { width: min(100%, 480px); background: #fff; border: 1px solid #dce3e1; border-radius: 8px; padding: 42px; box-shadow: 0 12px 30px rgba(29, 43, 53, .07); }
+.eyebrow { margin: 0 0 10px; color: #496d61; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; }
+h1, h2, p { margin-top: 0; }
+h1 { margin-bottom: 14px; color: #17232b; font-size: 34px; line-height: 1.16; letter-spacing: 0; }
+h2 { margin-bottom: 18px; color: #17232b; font-size: 24px; line-height: 1.28; }
+.lead { margin-bottom: 30px; color: #52615c; font-size: 19px; line-height: 1.5; }
+.access-form, .poll-form { display: grid; gap: 12px; }
+label, legend { color: #26383f; font-size: 17px; font-weight: 700; }
+input, textarea { width: 100%; min-height: 52px; padding: 12px 14px; color: #17232b; background: #fff; border: 1px solid #9baaa5; border-radius: 5px; }
+textarea { resize: vertical; }
+input:focus, textarea:focus { outline: 3px solid #b9dace; outline-offset: 1px; border-color: #36745f; }
+.access-form .primary-button { margin-top: 14px; }
+.primary-button, .secondary-button, .danger-button, .option-button, .remove-option, .text-button { border-radius: 5px; font-weight: 700; }
+.primary-button { min-height: 54px; padding: 13px 20px; color: #fff; background: #22674f; border: 1px solid #22674f; font-size: 18px; }
+.primary-button:hover { background: #19553f; }
+.primary-button.compact { min-height: 44px; font-size: 16px; }
+.secondary-button { min-height: 48px; padding: 10px 16px; color: #1d5844; background: #fff; border: 1px solid #54806f; }
+.danger-button { min-height: 48px; padding: 10px 16px; color: #8f211d; background: #fffafa; border: 1px solid #b8524e; }
+.text-button { padding: 8px 0; color: #355f50; background: transparent; border: 0; text-decoration: underline; }
+.room-page { padding: 48px 0 70px; }
+.room-topline { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 30px; border-bottom: 1px solid #dce3e1; }
+.room-topline .eyebrow { margin-bottom: 4px; }
+.participant-name { margin: 0; font-size: 19px; font-weight: 700; }
+.lot-label { margin: 4px 0 0; color: #66736e; }
+.ballot, .waiting-state { margin-top: 55px; }
+.status { display: inline-block; margin-bottom: 16px; color: #52615c; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+.status.open { color: #1c654c; }
+.ballot h1 { max-width: 680px; font-size: 36px; }
+.options { display: grid; gap: 14px; margin-top: 30px; }
+.option-button { min-height: 72px; padding: 15px 24px; color: #1d2b35; background: #fff; border: 2px solid #a4b7b0; text-align: left; font-size: 20px; }
+.option-button:hover, .option-button:focus { background: #edf7f1; border-color: #22674f; outline: none; }
+.success-message { margin-top: 28px; padding: 24px; background: #e7f4ec; border-left: 5px solid #287454; }
+.success-message h2 { margin-bottom: 7px; font-size: 22px; }
+.success-message p { margin: 0; font-size: 18px; }
+.waiting-state { max-width: 560px; text-align: center; margin-inline: auto; padding-top: 50px; }
+.waiting-mark { width: 54px; height: 54px; margin: 0 auto 30px; background: #d8e9e0; border: 12px solid #4a8a70; border-radius: 50%; }
+.waiting-state p:last-child { color: #5d6d66; font-size: 19px; line-height: 1.5; }
+.admin-page { min-height: 100vh; background: #f4f6f4; }
+.admin-content { width: min(100% - 40px, 920px); margin: 0 auto; padding: 48px 0 70px; }
+.admin-intro { margin-bottom: 30px; }
+.admin-intro h1 { margin-bottom: 0; }
+.editor-panel, .live-poll { background: #fff; border: 1px solid #dce3e1; border-radius: 8px; padding: 32px; }
+.poll-form { gap: 14px; }
+fieldset { display: grid; gap: 12px; margin: 8px 0 0; padding: 0; border: 0; }
+legend { margin-bottom: 12px; }
+.option-field { display: flex; gap: 10px; align-items: center; }
+.remove-option { min-height: 42px; padding: 8px 12px; color: #8f211d; background: #fff; border: 1px solid #b8524e; font-size: 14px; }
+.form-actions { display: flex; justify-content: space-between; gap: 16px; margin-top: 16px; }
+.live-poll-heading { display: flex; justify-content: space-between; align-items: start; gap: 24px; padding-bottom: 26px; border-bottom: 1px solid #dce3e1; }
+.admin-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+.live-poll-heading h2 { margin-bottom: 0; }
+.results { padding-top: 27px; }
+.vote-count { margin-bottom: 24px; color: #52615c; font-size: 17px; }
+.result-row { margin-bottom: 20px; }
+.result-label { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 8px; font-size: 17px; }
+.result-track { height: 14px; overflow: hidden; background: #e2e9e5; border-radius: 2px; }
+.result-fill { height: 100%; min-width: 0; background: #347c60; transition: width 180ms ease; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+@media (max-width: 620px) { .site-header { padding-inline: 20px; } .centered-page, .room-page, .admin-content { width: min(100% - 32px, 720px); } .access-panel, .editor-panel, .live-poll { padding: 26px 20px; } h1, .ballot h1 { font-size: 29px; } .lead, .waiting-state p:last-child { font-size: 18px; } .room-page { padding-top: 32px; } .room-topline, .live-poll-heading { flex-direction: column; } .option-button { min-height: 68px; font-size: 19px; } .form-actions { flex-direction: column-reverse; } .form-actions button, .admin-actions button { width: 100%; } .admin-actions { width: 100%; } .option-field { align-items: stretch; } .remove-option { min-height: 52px; } }
