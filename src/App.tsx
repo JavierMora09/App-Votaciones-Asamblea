@@ -53,10 +53,14 @@ function VoterRoom({ voter, onLeave }: { voter: VoterSession; onLeave: () => voi
   const [message, setMessage] = useState('')
 
   async function loadPoll() {
-    setLoading(true)
-    setMessage('')
     const { data } = await supabase.from('questions').select('id, question, options').eq('status', 'open').maybeSingle()
-    setPoll(data ? { id: data.id, question: data.question, options: data.options as string[] } : null)
+    const nextPoll = data ? { id: data.id, question: data.question, options: data.options as string[] } : null
+
+    if (nextPoll?.id !== poll?.id || !nextPoll) {
+      setMessage('')
+    }
+
+    setPoll(nextPoll)
     setLoading(false)
   }
 
